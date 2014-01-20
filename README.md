@@ -155,6 +155,21 @@ cd yaourt
 makepkg -si
 ```
 
+
+### 4.5 vcgencmd and other vc tools
+```bash
+vim /etc/profile
+```
+
+Change the line saying `PATH=`:
+
+```bash
+# Set our default path
+PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/opt/vc/sbin:/opt/vc/bin"
+export PATH
+```
+
+
 ## 5. Setup SSH server
 ```bash
 systemctl enable sshd
