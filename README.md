@@ -8,7 +8,7 @@ A really opionionated guide how to setup a RPi with Arch Linux including ntp, wi
 ### 1.2. Write the image via dd on the SDCard
     sudo dd bs=1M if=ArchLinuxARM-2014.01-rpi.img of=/dev/sdb
 
-### 1.3. Resize der Partition via gparted
+### 1.3. Resize of the Partition via gparted
 If your SD card is larger than 2 GB, you will want to resize the partitions to make use of your entire card.
 
 The image creates two partitions, which will be available as /dev/mmcblk0p1 and /dev/mmcblk0p2 when you boot up your Raspberry Pi. The first partition (100 MB) is mounted to /boot, and the second (1.7 GB by default) is mounted to the root directory /. Leave the first partition as it is, and expand the second to as large as you desire within the space available on your card.
