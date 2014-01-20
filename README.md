@@ -1,6 +1,6 @@
 # Raspberry-Pi-Setup-Guide
 
-A really opionionated guide how to setup a RPi with Arch Linux including ntp, wi-fi, ssh, ruby, zsh etc.
+A really opionionated guide how to setup a RPi with Arch Linux including WiringPi, ntp, wi-fi, ssh, ruby, zsh etc.
 
 Take a look into the wiki for more interesing stuff like finding out your Raspberry Pi version.
 
@@ -177,6 +177,21 @@ Change the line saying `PATH=`:
 PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/opt/vc/sbin:/opt/vc/bin"
 export PATH
 ```
+
+
+### 4.6 WiringPi
+```bash
+sudo git clone git://git.drogon.net/wiringPi /opt/wiringpi`
+cd /opt/wiringpi
+sudo ./build
+
+gpio -v
+gpio readall
+```
+
+* The last both command should give an `ok` or something. If not, something may be broken.
+
+
 
 
 ## 5. Setup SSH server
