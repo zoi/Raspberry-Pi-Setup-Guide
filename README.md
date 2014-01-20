@@ -2,6 +2,8 @@
 
 A really opionionated guide how to setup a RPi with Arch Linux including ntp, wi-fi, ssh, ruby, zsh etc.
 
+Take a look into the wiki for more interesing stuff like finding out your Raspberry Pi version.
+
 
 ## 1. Setup the SD card
 ### 1.1. Download the image from the website
