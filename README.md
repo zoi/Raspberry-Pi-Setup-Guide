@@ -181,7 +181,7 @@ export PATH
 
 ### 4.6 WiringPi
 ```bash
-sudo git clone git://git.drogon.net/wiringPi /opt/wiringpi`
+sudo git clone git://git.drogon.net/wiringPi /opt/wiringpi
 cd /opt/wiringpi
 sudo ./build
 
