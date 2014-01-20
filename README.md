@@ -5,6 +5,13 @@ A really opionionated guide how to setup a RPi with Arch Linux including ntp, wi
 Take a look into the wiki for more interesing stuff like finding out your Raspberry Pi version.
 
 
+## Some words regarding the hardware
+I recommend you to get a speed class 10 SD Card with more then 4 GB capacity for optimal performance.
+
+Additionally you should by a small heatsink. [Something like that](http://www.amazon.com/s/ref=nb_sb_noss_1?url=search-alias%3Daps&field-keywords=raspberry%20pi%20heatsink&sprefix=raspberry+pi+he%2Caps&rh=i%3Aaps%2Ck%3Araspberry%20pi%20heatsink).
+
+
+
 ## 1. Setup the SD card
 ### 1.1. Download the image from the website
 ### 1.2. Write the image via dd on the SDCard
@@ -200,6 +207,8 @@ arm_freq=950
 core_freq=450
 sdram_freq=450
 over_voltage=6
+
+gpu_mem=16
 ```
 
 * Then reboot
