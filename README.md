@@ -146,7 +146,7 @@ adduser
 * Log out and log in with our new created user
 
 ```bash
-sudo pacman -S nfs-utils htop openssh autofs alsa-utils alsa-firmware alsa-lib alsa-plugins git zsh zsh-grml-config base-devel diffutils
+sudo pacman -S nfs-utils htop openssh autofs alsa-utils alsa-firmware alsa-lib alsa-plugins git zsh zsh-grml-config base-devel diffutils libnewt
 ```
 
 
@@ -214,19 +214,13 @@ amixer cset numid=3 1
 
 
 ## 7. Raspberry pi overclocking
-You may want to overclock the Pi. This settings equals to the "high" overclocking known from `rasp-config`.
+You may want to overclock the Pi. And you won't even loose the guarantee for your pi, if you use the "offical" overclocking presets. The simplest way to overclock the pi is `rasp-config` tool which ships with the offical allowed overclocking presets.
+
 ```
-nano /boot/config.txt
-
-arm_freq=950
-core_freq=450
-sdram_freq=450
-over_voltage=6
-
-gpu_mem=16
+wget https://raw2.github.com/chattama/raspi-config-archlinux/archlinux/raspi-config
 ```
 
-* Then reboot
+Get to the overclocking menu and choose the overclocking preset you want. I recommend the "high" preset. After changing the overclocking preset, reboot your raspberry pi.
  
 
 
