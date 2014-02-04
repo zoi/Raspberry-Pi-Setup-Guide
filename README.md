@@ -1,4 +1,4 @@
-# Raspberry-Pi-Setup-Guide
+# Raspberry Pi Setup Guide
 
 A really opionionated guide how to setup a RPi with Arch Linux including WiringPi, ntp, wi-fi, ssh, ruby, zsh etc.
 
