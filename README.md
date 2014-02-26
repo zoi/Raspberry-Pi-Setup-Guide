@@ -260,10 +260,22 @@ rake install
     
 
 ## 11. Tweaks
-TRIM and noatime
+### 11.1 TRIM and noatime
+Change in your fstab:
+
 ```
 /dev/root  /  ext4  noatime,discard  0  0
 ```
+
+
+### 11.2 Disable tmpfs for /tmp
+Since our RAM is limited.
+
+```bash
+sudo systemctl stop tmp.mount
+sudo systemctl disable tmp.mount
+```
+
 
 
 
