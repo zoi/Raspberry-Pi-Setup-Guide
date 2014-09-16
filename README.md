@@ -246,15 +246,12 @@ gem install bundler
 
 
 ## 10. ZSH and dotfiles
-If you want to use ZSH and my dotfiles ...
+If you want to use ZSH
 ```bash
 sudo usermod -s /usr/bin/zsh
-
-cd ~
-git clone https://github.com/phortx/dotfiles.git .dotfiles
-cd .dotfiles
-rake install
 ```
+
+Additionally you may want to clone and setup your personal dotfiles.
 
 * Relog
     
