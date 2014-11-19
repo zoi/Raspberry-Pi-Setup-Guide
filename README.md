@@ -8,21 +8,21 @@ Take a look into the wiki for more interesing stuff like finding out your Raspbe
 ## Some words regarding the hardware
 I recommend you to get a speed class 10 SD Card with more then 4 GB capacity for optimal performance.
 
-Additionally you should by a small heatsink. [Something like that](http://www.amazon.com/s/ref=nb_sb_noss_1?url=search-alias%3Daps&field-keywords=raspberry%20pi%20heatsink&sprefix=raspberry+pi+he%2Caps&rh=i%3Aaps%2Ck%3Araspberry%20pi%20heatsink).
+Additionally you should buy a small heatsink. [Something like that](http://www.amazon.com/s/ref=nb_sb_noss_1?url=search-alias%3Daps&field-keywords=raspberry%20pi%20heatsink&sprefix=raspberry+pi+he%2Caps&rh=i%3Aaps%2Ck%3Araspberry%20pi%20heatsink).
 
 
 
 ## 1. Setup the SD card
 ### 1.1. Download the image from the website
-### 1.2. Write the image via dd on the SDCard
+### 1.2. Write the image via dd onto the SDCard
     sudo dd bs=1M if=ArchLinuxARM-2014.01-rpi.img of=/dev/sdb
 
-### 1.3. Resize of the Partition via gparted
+### 1.3. Resize the Partition via gparted
 If your SD card is larger than 2 GB, you will want to resize the partitions to make use of your entire card.
 
-The image creates two partitions, which will be available as /dev/mmcblk0p1 and /dev/mmcblk0p2 when you boot up your Raspberry Pi. The first partition (100 MB) is mounted to /boot, and the second (1.7 GB by default) is mounted to the root directory /. Leave the first partition as it is, and expand the second to as large as you desire within the space available on your card.
+The image creates two partitions, which will be available as /dev/mmcblk0p1 and /dev/mmcblk0p2 when you boot up your Raspberry Pi. The first partition (100 MB) is mounted to /boot, and the second (1.7 GB by default) is mounted to the root directory /. Leave the first partition as is, and expand the second to as large as you desire within the space available on your card.
 
-I recommend to use gparted.
+I recommend using gparted.
 
 ### 1.4. Put the SD Card into your pi, power it on and login with root/root
 You should have connected a keyboard via usb and some kind of screen via hdmi.
@@ -30,7 +30,7 @@ You should have connected a keyboard via usb and some kind of screen via hdmi.
 
 ## 2. Basic system setup
 ### 2.1. German keyboard layout and timezone
-Of course just if you want to have german keyboard layout. You may skip that step or use another layout.
+Of course just if you want to have a german keyboard layout. You may skip this step or use another layout.
 
 ```bash
 loadkeys de
@@ -66,7 +66,7 @@ swapon /swapfile
 ```
 
 
-### 2.3. Set hardware clock to utc and set timezone
+### 2.3. Set hardware clock to UTC and set timezone
 ```bash
 timedatectl set-local-rtc 0
 
@@ -143,7 +143,7 @@ adduser
 ```
 
 ### 4.4. Additional software
-* Log out and log in with our new created user
+* Log out and log in with our newly created user
 
 ```bash
 sudo pacman -S nfs-utils htop openssh autofs alsa-utils alsa-firmware alsa-lib alsa-plugins git zsh zsh-grml-config base-devel diffutils libnewt
@@ -189,7 +189,7 @@ gpio -v
 gpio readall
 ```
 
-* The last both command should give an `ok` or something. If not, something may be broken.
+* The last both command should give an `ok` or something similar. If not, something may be broken.
 
 
 
@@ -213,8 +213,8 @@ amixer cset numid=3 1
 
 
 
-## 7. Raspberry pi overclocking
-You may want to overclock the Pi. And you won't even loose the guarantee for your pi, if you use the "offical" overclocking presets. The simplest way to overclock the pi is `rasp-config` tool which ships with the offical allowed overclocking presets.
+## 7. Raspberry Pi overclocking
+You may want to overclock the Pi. And you won't even lose the guarantee for your pi, if you use the "offical" overclocking presets. The simplest way to overclock the pi is `rasp-config` tool which ships with the offical allowed overclocking presets.
 
 ```
 wget https://raw2.github.com/chattama/raspi-config-archlinux/archlinux/raspi-config
