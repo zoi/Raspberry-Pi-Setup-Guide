@@ -14,6 +14,22 @@ Additionally you should buy a small heatsink. [Something like that](http://www.a
 
 ## 1. Setup the SD card
 ### 1.1. Download the image from the website
+
+There are 2 distributions of raspberry pi now. You may find the downloads on [www.archlinuxarm.org](http://www.archlinuxarm.org) for the latest version of archlinux on raspberry pi.
+
+```
+# For Raspberry Pi 2
+wget http://archlinuxarm.org/os/ArchLinuxARM-rpi-2-latest.tar.gz
+bsdtar -xpf ArchLinuxARM-rpi-2-latest.tar.gz -C root
+sync
+
+# For Raspberry Pi 1
+wget http://archlinuxarm.org/os/ArchLinuxARM-rpi-latest.tar.gz
+bsdtar -xpf ArchLinuxARM-rpi-latest.tar.gz -C root
+sync
+```
+
+
 ### 1.2. Write the image via dd onto the SDCard
     sudo dd bs=1M if=ArchLinuxARM-2014.01-rpi.img of=/dev/sdb
 
@@ -38,10 +54,8 @@ echo LANG=de_DE.UTF-8 > /etc/locale.conf
 echo KEYMAP=de-latin1-nodeadkeys > /etc/vconsole.conf
 rm /etc/localtime
 ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime
-nano /etc/locale.conf
+sed -i "s/en_US.UTF-8/#en_US.UTF-8/" /etc/locale.conf
 ```
-
-* Uncomment `en_US.UTF-8`
 
 ```bash
 export LANGUAGE=en_US.UTF-8
@@ -57,6 +71,7 @@ fallocate -l 1024M /swapfile
 chmod 600 /swapfile
 mkswap /swapfile
 swapon /swapfile
+echo 'vm.swappiness=1' > /etc/sysctl.d/99-sysctl.conf
 ```
 
 * Then add the following line to `/etc/fstab`:
@@ -79,10 +94,8 @@ nano /etc/timezone
 ## 3. Update system and enable NTP
 ### 3.1. Tweak pacman
 ```bash
-vim /etc/pacman.conf
+sed -i 's/#Color/Color/' /etc/pacman # Add color to pacman
 ```
-
-* Uncomment the line "Color"
 
 
 ### 3.2. System update
@@ -146,7 +159,7 @@ adduser
 * Log out and log in with our newly created user
 
 ```bash
-sudo pacman -S nfs-utils htop openssh autofs alsa-utils alsa-firmware alsa-lib alsa-plugins git zsh zsh-grml-config base-devel diffutils libnewt
+sudo pacman -S --needed nfs-utils htop openssh autofs alsa-utils alsa-firmware alsa-lib alsa-plugins git zsh zsh-grml-config base-devel diffutils libnewt
 ```
 
 
@@ -253,7 +266,7 @@ sudo usermod -s /usr/bin/zsh
 
 Additionally you may want to clone and setup your personal dotfiles.
 
-* Relog
+* Logout and login back again or just reboot the pi
     
 
 ## 11. Tweaks
