@@ -127,7 +127,7 @@ passwd
 
 ### 4.2. Set hostname
 ```bash
-nano /etc/hostname
+hostnamectl set-hostname your-hostname
 ```
 
 
