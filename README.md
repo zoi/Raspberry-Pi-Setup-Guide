@@ -20,11 +20,13 @@ There are 2 distributions of raspberry pi now. You may find the downloads on [ww
 ```
 # For Raspberry Pi 2
 wget http://archlinuxarm.org/os/ArchLinuxARM-rpi-2-latest.tar.gz
+mkdir root
 bsdtar -xpf ArchLinuxARM-rpi-2-latest.tar.gz -C root
 sync
 
 # For Raspberry Pi 1
 wget http://archlinuxarm.org/os/ArchLinuxARM-rpi-latest.tar.gz
+mkdir root
 bsdtar -xpf ArchLinuxARM-rpi-latest.tar.gz -C root
 sync
 ```
