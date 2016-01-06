@@ -36,9 +36,9 @@ SD card into the slot.
    the default first and last sector.
 6. Write the partition table and exit by typing `w`.
 7. Now create a FAT filesystem: `mkfs.vfat /dev/sdX1` and mount the new boot partition via
-   `mkdir boot && mount /dev/sdX1 boot`
+   `mkdir boot && sudo mount /dev/sdX1 boot`
 8. Also create the ext4 filesystem for the root partition: `mkfs.ext4 /dev/sdX2` and mount it:
-   `mkdir root && mount /dev/sdX2 root`
+   `mkdir root && sudo mount /dev/sdX2 root`
 
 
 
@@ -52,8 +52,7 @@ There are 2 major versions of Raspberry Pi now. You may find the downloads on
 
 ```bash
 wget http://archlinuxarm.org/os/ArchLinuxARM-rpi-2-latest.tar.gz
-mkdir alarm
-tar -xpf ArchLinuxARM-rpi-2-latest.tar.gz -C alarm
+sudo tar -xpf ArchLinuxARM-rpi-2-latest.tar.gz -C root
 sync
 ```
 
@@ -62,7 +61,7 @@ sync
 
 ```bash
 wget http://archlinuxarm.org/os/ArchLinuxARM-rpi-latest.tar.gz
-tar -xpf ArchLinuxARM-rpi-latest.tar.gz -C root
+sudo tar -xpf ArchLinuxARM-rpi-latest.tar.gz -C root
 sync
 ```
 
