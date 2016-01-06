@@ -69,8 +69,8 @@ sync
 ### 1.3. Write the files onto the SD Card
 
 ```bash
-mv root/boot/* boot/
-unmount boot root
+sudo mv root/boot/* boot/
+sudo unmount boot root
 ```
 
 
