@@ -134,7 +134,7 @@ nano /etc/timezone
 ### 3.1. Tweak pacman
 
 ```bash
-sed -i 's/#Color/Color/' /etc/pacman # Add color to pacman
+sed -i 's/#Color/Color/' /etc/pacman.conf # Add color to pacman
 ```
 
 
