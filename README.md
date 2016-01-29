@@ -291,9 +291,8 @@ netctl enable yourWifiSSID
 ## 9. Ruby
 
 ```bash
-\curl -sSL https://get.rvm.io | bash -s stable
-useradd -G rvm benny
-yaourt -S ruby
+\curl -sSL https://get.rvm.io | sudo bash -s stable
+sudo usermod -aG rvm yourUser
 rvm reload
 rvm install ruby
 rvm list
