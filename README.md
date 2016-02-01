@@ -74,13 +74,23 @@ sudo unmount boot root
 ```
 
 
-### 1.4. Put the SD Card into your pi, power it on and login with alarm/alarm
+### 1.4. Put the SD Card into your pi, power it on and login with `alarm`/`alarm`
 
 You can have connected a keyboard via USB and some kind of screen via HDMI or you can connect to the Pi via SSH after
 it's booted.
 
 
 ## 2. Basic system setup
+
+First of all get root:
+
+```bash
+su
+```
+
+The password is `root`.
+
+
 ### 2.1. German keyboard layout and timezone
 
 Of course just if you want to have a german keyboard layout. You may skip this step or use another layout.
@@ -150,6 +160,8 @@ pacman -S filesystem --force
 reboot
 ```
 
+After the Pi is booted again, connect via SSH (if you don't have attached a keyboard and screen) and login with `alarm`/`alarm` and get root again via `su`.
+
 
 ### 3.3. NTP
 
@@ -188,46 +200,56 @@ visudo
 %wheel ALL=(ALL) ALL
 ```
 
-* Then install adduser
+* Add a new user (replace `yourUserName` with your username!)
 
 ```bash
-pacman -S adduser
+useradd -d /home/yourUserName -m -G wheel,rvm -s /bin/bash yourUserName
 ```
 
-* Add a new user. The additional groups are `rvm` and `wheel`
+* Set a password for your new user:
 
 ```bash
-adduser
+passwd yourUserName
 ```
-
-### 4.4. Additional software
 
 * Log out and log in with our newly created user
 
+* After that, delete the old `alarm` user:
+
 ```bash
-sudo pacman -S --needed nfs-utils htop openssh autofs alsa-utils alsa-firmware alsa-lib alsa-plugins git zsh zsh-grml-config base-devel diffutils libnewt
+sudo userdel alarm
+```
+
+
+### 4.4. Additional software
+
+```bash
+sudo pacman -S --needed nfs-utils htop openssh autofs alsa-utils alsa-firmware alsa-lib alsa-plugins git zsh wget base-devel diffutils libnewt dialog wpa_supplicant wireless_tools iw crda lshw
 ```
 
 
 * Install yaourt:
 
 ```bash
-wget https://aur.archlinux.org/packages/pa/package-query/package-query.tar.gz
+wget https://aur.archlinux.org/cgit/aur.git/snapshot/package-query.tar.gz
 tar -xvzf package-query.tar.gz
 cd package-query
 makepkg -si
 cd ..
-wget https://aur.archlinux.org/packages/ya/yaourt/yaourt.tar.gz
+wget https://aur.archlinux.org/cgit/aur.git/snapshot/yaourt.tar.gz
 tar -xvzf yaourt.tar.gz
 cd yaourt
 makepkg -si
+
+cd ../
+rm -rf package-query/ package-query.tar.gz yaourt/ yaourt.tar.gz
 ```
 
 
 ### 4.5 vcgencmd and other vc tools
 
 ```bash
-vim /etc/profile
+sudo vim /etc/profile
 ```
 
 Change the line saying `PATH=`:
@@ -236,6 +258,12 @@ Change the line saying `PATH=`:
 # Set our default path
 PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/opt/vc/sbin:/opt/vc/bin"
 export PATH
+```
+
+And reload it:
+
+```bash
+source /etc/profile
 ```
 
 
@@ -256,10 +284,12 @@ gpio readall
 
 ## 5. Sound
 
+This is just for Raspberry Pi 1.
+
 Set the output device
 
 ```bash
-amixer cset numid=3 1
+sudo amixer cset numid=3 1
 ```
 
 
@@ -282,7 +312,7 @@ the overclocking preset, reboot your raspberry pi.
 ## 7. Wi-Fi
 
 ```bash
-wifi-menu -o
+sudo wifi-menu -o
 netctl start yourWifiSSID
 netctl enable yourWifiSSID
 ```
@@ -297,7 +327,7 @@ rvm reload
 rvm install ruby
 rvm list
 rvm alias create default ruby-2.3.0 # Or something else depending on what rvm list says
-gem install bundler
+gem install bundler rake
 ```
 
 
@@ -317,6 +347,10 @@ Additionally you may want to clone and setup your personal dotfiles.
 ### 11.1 TRIM and noatime
 
 Change in your fstab:
+
+```bash
+sudo vim /etc/fstab
+```
 
 ```
 /dev/root  /  ext4  noatime,discard  0  0
