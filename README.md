@@ -70,7 +70,7 @@ sync
 
 ```bash
 sudo mv root/boot/* boot/
-sudo unmount boot root
+sudo umount boot root
 ```
 
 
