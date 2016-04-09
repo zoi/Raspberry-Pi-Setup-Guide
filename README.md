@@ -1,6 +1,6 @@
 # Raspberry Pi Setup Guide
 
-A really opionionated guide how to setup a Raspberry Pi (1 or 2) with Arch Linux including WiringPi, NTP, Wi-Fi, SSH,
+A really opionionated guide how to setup every version of a Raspberry Pi with Arch Linux including WiringPi, NTP, Wi-Fi, SSH,
 Ruby, ZSH and more.
 
 Take a look into the wiki for more interesing stuff like finding out your Raspberry Pi version.
