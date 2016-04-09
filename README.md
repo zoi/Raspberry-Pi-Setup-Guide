@@ -23,7 +23,7 @@ Additionally you should buy a small heatsink. [Something like that](http://www.a
 ### 1.1. Format the SD card with fdisk
 
 Replace `/dev/sdX` with the SD Card device. Make sure that the device is the SD card and not your harddrive, otherwise
-you'll destroy your linux installation! You can see which device you'll have to use by running `dmesg` after putting the
+you'll destroy your linux installation! You can see which device you'll have to use by running `sudo fdisk -l` after putting the
 SD card into the slot.
 
 1. Start `fdisk` via `sudo fdisk /dev/sdX`.
@@ -70,7 +70,7 @@ sync
 
 ```bash
 sudo mv root/boot/* boot/
-sudo unmount boot root
+sudo umount boot root
 ```
 
 
