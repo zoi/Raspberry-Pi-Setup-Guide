@@ -344,7 +344,7 @@ Additionally you may want to clone and setup your personal dotfiles.
 
 
 ## 11. Tweaks
-### 11.1 TRIM and noatime
+### 11.1 Increase SD card lifetime
 
 Change in your fstab:
 
@@ -353,19 +353,8 @@ sudo vim /etc/fstab
 ```
 
 ```
-/dev/root  /  ext4  noatime,discard  0  0
+/dev/root  /  ext4  defaults,nodiratime,noatime,discard  0  0
 ```
-
-
-### 11.2 Disable tmpfs for /tmp
-
-Since our RAM is limited.
-
-```bash
-sudo systemctl stop tmp.mount
-sudo systemctl disable tmp.mount
-```
-
 
 
 
