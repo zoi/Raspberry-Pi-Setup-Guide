@@ -37,22 +37,26 @@ SD card into the slot.
 6. Write the partition table and exit by typing `w`.
 7. Now create a FAT filesystem: `mkfs.vfat /dev/sdX1` and mount the new boot partition via
    `mkdir boot && sudo mount /dev/sdX1 boot`
-8. Also create the ext4 filesystem for the root partition: `mkfs.ext4 /dev/sdX2` and mount it:
+8. Also create the filesystem for the root partition and mount it. You can choose between the classic `ext4` filesystem, or the flash filesystem friendly `f2fs`.
+   a.) (RECOMMENDED!) You need to install `f2fs-tools`, then format root partition to f2fs:
+   `sudo pacman -S f2fs-rools`    
+   `sudo mkfs.f2fs /dev/sdX2`   
+   `mkdir root && sudo mount -t f2fs /dev/sdX2 root`
+   b.) (Easy way.) Format to ext4 filesystem: 
+   `sudo mkfs.ext4 /dev/sdX2`   
    `mkdir root && sudo mount /dev/sdX2 root`
-
-
 
 ### 1.2. Download the image from the website
 
-There are 2 major versions of Raspberry Pi now. You may find the downloads on
-[www.archlinuxarm.org](http://www.archlinuxarm.org) for the latest version of Arch Linux for Raspberry Pi both 1 and 2.
+There are 3 major versions of Raspberry Pi now. You may find the downloads on
+[www.archlinuxarm.org](http://www.archlinuxarm.org) for the latest version of Arch Linux for Raspberry Pi 1, 2 and 3.
 
 
-**For Raspberry Pi 2**
+**For Raspberry Pi 2 or 3**
 
 ```bash
 wget http://archlinuxarm.org/os/ArchLinuxARM-rpi-2-latest.tar.gz
-sudo tar -xpf ArchLinuxARM-rpi-2-latest.tar.gz -C root
+sudo tar tar xvzf ArchLinuxARM-rpi-2-latest.tar.gz -C root
 sync
 ```
 
@@ -61,7 +65,7 @@ sync
 
 ```bash
 wget http://archlinuxarm.org/os/ArchLinuxARM-rpi-latest.tar.gz
-sudo tar -xpf ArchLinuxARM-rpi-latest.tar.gz -C root
+sudo tar xvzf ArchLinuxARM-rpi-latest.tar.gz -C root
 sync
 ```
 
@@ -73,14 +77,63 @@ sudo mv root/boot/* boot/
 sudo umount boot root
 ```
 
+### 1.4. If you choose to use `f2fs` for root filesystem, you have to some extra changes. Skip this step in case of using `ext4` rootfs.
+   
+   Edit `fstab` and add the next lines:
+   `nano root/etc/fstab`
+   
+   `
+   /dev/mmcblk0p2    /        f2fs    defaults,noatime,discard    0  0
+   tmpfs             /tmp     tmpfs   nodev,nosuid,size=2G        0  0
+   `
+   Next change the boot command line to identify `f2fs` filesystem type:
+   `nano /mnt/boot/cmdline.txt`
 
-### 1.4. Put the SD Card into your pi, power it on and login with `alarm`/`alarm`
+   After root partition, add `rootfstype=f2fs`:
+   `root=/dev/mmcblk0p2 rw rootwait rootfstype=f2fs ...`
+   Later you have to install `f2fs-tools` to your installation. Until that, you have to substitute the fs checker command:
+    `cp root/bin/true root/sbin/fsck.f2fs`
+
+### 1.5. Some other recommended changes in `config.txt` before booting up your Pi:
+
+   `sudo nano boot/config.txt`
+   
+   Add more memory to gpu. (For use of Kodi, minimum 128MB recommended)
+   `gpu_mem=192`
+   
+   Purchased licence codes to enable hardware codecs:
+   `
+   decode_MPG2=0x12345678
+   decode_WVC1=0x12345678
+   `
+   
+   HDMI output modes:
+   `hdmi_drive=1 #Normal DVI mode (no sound)`
+   or
+   `hdmi_drive=2 #Normal HDMI mode (sound will be sent if supported and enabled)`
+   
+   HDMI force hotplug (HDMI output mode will be used, even if no HDMI monitor is detected.)
+   `hdmi_force_hotplug=1`
+   
+   Disable HDMI overscan
+   `disable_overscan=1`
+   
+   Enabling and control the onboard audio, I2C, I2S and SPI interfaces without using dedicated overlays:
+   `dtparam=audio=on,i2c_arm=on,i2s=on,spi=on`
+   
+   If you have a class 10 SD card, you can add below in config.txt:
+   `dtparam=sd_overclock=100`
+
+### 1.5. Unmount filesystems of the SD Card:
+
+    `umount /mnt/boot /mnt/root`
+
+## 2. Basic system setup.
+
+Put the SD Card into your pi, power it on and login with `alarm`/`alarm`
 
 You can have connected a keyboard via USB and some kind of screen via HDMI or you can connect to the Pi via SSH after
 it's booted.
-
-
-## 2. Basic system setup
 
 First of all get root:
 
@@ -91,28 +144,84 @@ su
 The password is `root`.
 
 
-### 2.1. German keyboard layout and timezone
+### 2.1. Change keyboard layout and timezone
 
-Of course just if you want to have a german keyboard layout. You may skip this step or use another layout.
+   Setup the appropriate locale. First edit `/etc/locale.gen` and uncomment the lines that correspond to your 
+   language selection, generate the needed locales, set your keymap and finally set the language with the system.
+   `[root@alarmpi ~]$ nano /etc/locale.gen`
+   
+   `
+   ...
+   hu_HU ISO-8859-2
+   hu_HU.UTF-8
+   ...
+   `
+   
+   `[root@alarmpi ~]$ locale-gen`
+   `Generating locales...
+   hu_US.UTF-8
+   hu_US.ISO-8859-2
+   Generation complete.`
+   
+   `[root@alarmpi ~]$ localectl set-keymap hu`
+   `[root@alarmpi ~]$ localectl set-locale LANG="hu_HU.UTF-8"`
+   
+   Set hardware clock to UTC and configure the timezone. For me this is `Europe/Budapest` as I am located in Hungary. 
+   Then enable ntpd for internet time syncing capabilities.
+   `[root@alarmpi ~]$ timedatectl set-local-rtc 0`
+   `[root@alarmpi ~]$ timedatectl set-timezone Europe/Budapest`
+   `[root@alarmpi ~]$ systemctl enable ntpd`
 
-```bash
-loadkeys de
-echo LANG=de_DE.UTF-8 > /etc/locale.conf
-echo KEYMAP=de-latin1-nodeadkeys > /etc/vconsole.conf
-rm /etc/localtime
-ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime
-sed -i "s/en_US.UTF-8/#en_US.UTF-8/" /etc/locale.conf
-```
+### 2.3. Set hostname and configure network
+   Set the hostname for use with networks, I will be using the hostname `rpi.local`
+   `root@alarmpi ~]$ hostnamectl set-hostname rpi.local`
+   
+   For a wired network card first copy a template and then edit it. In example, we will use dhcp settings.
+   `
+   [root@alarmpi ~]$ cd /etc/netctl
+   [root@alarmpi ~]$ cp examples/ethernet-dhcp eth0
+   [root@alarmpi ~]$ nano eth0
+   `
+   
+   `
+   Description='A basic dhcp ethernet connection'
+   Interface=eth0
+   Connection=ethernet
+   IP=dhcp
+   ExecUpPost='/usr/bin/ntpd -gq || true'
+   `
 
-```bash
-export LANGUAGE=en_US.UTF-8
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
-locale-gen en_US.UTF-8
-```
+   `
+   [root@alarmpi ~]$ chmod 640 eth0
+   [root@alarmpi ~]$ netctl enable eth0
+   `
+   
+   If you wish to use wireless instead it is pretty much the same process except we use a different template. 
+   The only difference is to make sure you secure the file if it contains your wireless password.
+   `
+   [root@alarmpi ~]$ cd /etc/netctl
+   [root@alarmpi ~]$ cp examples/wireless-wpa wlan0
+   [root@alarmpi ~]$ nano wlan0
+   `
+   
+   `
+   Interface=wlan0
+   Connection=wireless
+   Security=wpa
+   IP=dhcp
+   ESSID='MyNetwork'
+   Key='WirelessKey'
+   ExecUpPost='/usr/bin/ntpd -gq || true'
+   `
+   
+   `
+   [root@alarmpi ~]$ chmod 640 wlan0
+   [root@alarmpi ~]$ netctl enable wlan0
+   `
+   
+   
 
-
-### 2.2. Setup swapfile
+### 2.4. Setup swapfile if using `ext4` as rootfs
 
 ```bash
 fallocate -l 1024M /swapfile
@@ -128,19 +237,7 @@ echo 'vm.swappiness=1' > /etc/sysctl.d/99-sysctl.conf
 /swapfile none swap defaults 0 0
 ```
 
-
-### 2.3. Set hardware clock to UTC and set timezone
-
-```bash
-timedatectl set-local-rtc 0
-
-nano /etc/timezone
-```
-
-* Set to "Europe/Berlin"
-
-
-## 3. Update system and enable NTP
+## 3. Update system
 ### 3.1. Tweak pacman
 
 ```bash
@@ -156,8 +253,8 @@ pacman-key --init
 pacman -S archlinux-keyring
 pacman-key --populate archlinux
 pacman -Syu --ignore filesystem
-pacman -S filesystem --force
-reboot
+pacman -S filesystem f2fs-tools --force
+systemctl reboot
 ```
 
 After the Pi is booted again, connect via SSH (if you don't have attached a keyboard and screen) and login with `alarm`/`alarm` and get root again via `su`.
@@ -180,14 +277,7 @@ passwd
 ```
 
 
-### 4.2. Set hostname
-
-```bash
-hostnamectl set-hostname your-hostname
-```
-
-
-### 4.3. sudo & user
+### 4.2. sudo & user
 
 ```bash
 pacman -S sudo vim
@@ -221,7 +311,7 @@ sudo userdel alarm
 ```
 
 
-### 4.4. Additional software
+### 4.3. Additional software
 
 ```bash
 sudo pacman -S --needed nfs-utils htop openssh autofs alsa-utils alsa-firmware alsa-lib alsa-plugins git zsh wget base-devel diffutils libnewt dialog wpa_supplicant wireless_tools iw crda lshw
@@ -246,7 +336,7 @@ rm -rf package-query/ package-query.tar.gz yaourt/ yaourt.tar.gz
 ```
 
 
-### 4.5 vcgencmd and other vc tools
+### 4.4 vcgencmd and other vc tools
 
 ```bash
 sudo vim /etc/profile
@@ -267,7 +357,7 @@ source /etc/profile
 ```
 
 
-### 4.6 WiringPi
+### 4.5 WiringPi
 
 ```bash
 sudo git clone git://git.drogon.net/wiringPi /opt/wiringpi
